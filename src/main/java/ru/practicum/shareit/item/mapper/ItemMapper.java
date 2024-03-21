@@ -1,26 +1,14 @@
 package ru.practicum.shareit.item.mapper;
 
-import ru.practicum.shareit.user.dto.UserDto;
-import ru.practicum.shareit.user.model.User;
+import org.mapstruct.Mapper;
+import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.model.Item;
 
-public class ItemMapper {
+@Mapper(componentModel = "spring")
+public interface ItemMapper {
 
-    public static UserDto toItemDto(User item) {
-        return new UserDto(
-                item.getName(),
-                item.getDescription(),
-                item.isAvailable(),
-                item.getRequest() != null ? item.getRequest().getId() : null
-        );
-    }
+    ItemDto toItemDto(Item item);
 
-    public static User toItem(UserDto itemDto) {
-        return new UserDto(
-                itemDto.getName(),
-                itemDto.getDescription(),
-                itemDto.isAvailable(),
-                itemDto.getRequestId()
-        );
-    }
+    Item toItem(ItemDto itemDto);
 
 }
