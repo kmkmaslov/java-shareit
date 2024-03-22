@@ -2,38 +2,89 @@ package ru.practicum.shareit.user.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.practicum.shareit.exception.ConflictException;
+import ru.practicum.shareit.exception.ValidationException;
+import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.user.storage.UserStorage;
+import ru.practicum.shareit.user.model.User;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    @Override
+    private final UserStorage userStorage;
+    @Autowired
+    private UserMapper userMapper;
+
     public List<UserDto> getAll() {
-        return null;
+        return userStorage.getAll()
+                .stream()
+                .map(userMapper::toUserDto)
+                .collect(Collectors.toList());
     }
 
-    @Override
     public UserDto create(UserDto userDto) {
-        return null;
+        User user = userMapper.toUser(userDto);
+        validateToCreate(user);
+        return userMapper.toUserDto(userStorage.create(user));
     }
 
-    @Override
+    private void validateToCreate(User user) {
+        String email = user.getEmail();
+        if (email == null || !email.contains("@")) {
+            log.info("У {} неверная почта", user);
+            throw new ValidationException();
+        }
+        List<User> users = getAll()
+                .stream()
+                .map(userMapper::toUser)
+                .collect(Collectors.toList());
+
+        for (User userToCheck : users) {
+            if (userToCheck.getEmail().equals(email)) {
+                log.info("Есть пользователь c id {} и почтой {}",
+                        userToCheck.getId(),
+                        userToCheck.getEmail());
+                throw new ConflictException();
+            }
+        }
+    }
+
     public UserDto update(long userId, UserDto userDto) {
-        return null;
+        User user = userMapper.toUser(userDto);
+        validateToUpdate(userId, user);
+        return userMapper.toUserDto(userStorage.update(userId, user));
     }
 
-    @Override
+    private void validateToUpdate(long userId, User user) {
+        String email = user.getEmail();
+        if (email != null && !email.contains("@")) {
+            log.info("У {} неверная почта", user);
+            throw new ValidationException();
+        }
+        List<User> users = getAll().stream().map(userMapper::toUser).collect(Collectors.toList());
+        for (User userToCheck : users) {
+            if (userToCheck.getId() != userId && userToCheck.getEmail().equals(email)) {
+                log.info("Есть пользователь c id {} и почтой {}",
+                        userToCheck.getId(),
+                        userToCheck.getEmail());
+                throw new ConflictException();
+            }
+        }
+    }
+
     public UserDto getUser(long userId) {
-        return null;
+        return userMapper.toUserDto(userStorage.getUser(userId));
     }
 
-    @Override
     public void deleteUser(long userId) {
-        // TODO document why this method is empty
+        userStorage.deleteUser(userId);
     }
 }
