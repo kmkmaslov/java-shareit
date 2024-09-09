@@ -39,4 +39,11 @@ public class ErrorHandler {
         return new ErrorResponse("An unexpected error occurred.");
     }
 
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ErrorResponse handleForbiddenException(final ForbiddenException e) {
+        log.debug("Получен статус 403 Bad Request {}", e.getMessage(), e);
+        return new ErrorResponse(e.getMessage());
+    }
+
 }
