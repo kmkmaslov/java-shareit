@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-@Repository
+@Repository("BookingRepository")
 public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     List<Booking> findAllByBooker(User booker, Sort sort);
