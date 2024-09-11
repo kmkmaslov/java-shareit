@@ -41,22 +41,13 @@ public class UserServiceImpl implements UserService {
 
     private void validateToCreate(User user) {
         String email = user.getEmail();
-        if (email == null || !email.contains("@")) {
-            log.info("У {} неверная почта", user);
+        if (email == null) {
+            log.info("У пользователя {} не задана электронная почта", user);
             throw new ValidationException();
         }
-        List<User> users = getAll()
-                .stream()
-                .map(userMapper::toUser)
-                .collect(Collectors.toList());
-
-        for (User userToCheck : users) {
-            if (userToCheck.getEmail().equals(email)) {
-                log.info("Есть пользователь c id {} и почтой {}",
-                        userToCheck.getId(),
-                        userToCheck.getEmail());
-                throw new ConflictException();
-            }
+        if (!email.contains("@")) {
+            log.info("У пользователя {} указана неверная электронная почта", user);
+            throw new ValidationException();
         }
     }
 
@@ -77,6 +68,7 @@ public class UserServiceImpl implements UserService {
             throw new ValidationException();
         }
         Optional<User> user = userRepository.findById(userId);
+        boolean ifUserExists = userRepository.existsById(userId);
 
         if (user.isEmpty()) {
             throw new NotFoundException();
@@ -125,9 +117,6 @@ public class UserServiceImpl implements UserService {
             throw new ForbiddenException();
         }
 
-        if (user.isEmpty()) {
-            throw new NotFoundException();
-        }
         return userMapper.toUserDto(user.get());
     }
 
