@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    #
+    driver-class-name: org.postgresql.Driver
+    # Database address
+    url: jdbc:postgresql://localhost:5432/shareit
+    # username
+    username: share_it_user
+    # password
+    password: password
+    main:
+      package-to-repo-scan: ru.practicum.share-it.booking.*
+      package-to-entity-scan: ru.practicum.share-it.booking.*
+
