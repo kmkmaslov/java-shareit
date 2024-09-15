@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import jakarta.persistence.*;
+import org.hibernate.Hibernate;
 
 @Entity
 @Data
@@ -28,7 +29,7 @@ public class User {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof User)) return false;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
         return id != null && id.equals(((User) o).getId());
     }
 
