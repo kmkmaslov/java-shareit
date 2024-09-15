@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.exception.ConflictException;
 import ru.practicum.shareit.exception.ForbiddenException;
 import ru.practicum.shareit.exception.NotFoundException;
@@ -51,6 +52,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Transactional
     public UserDto update(long userId, UserDto userDto) {
         User user = findUser(userId);
         if (userDto.getName() != null) {

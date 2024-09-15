@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingFromUserDto;
 import ru.practicum.shareit.booking.mapper.BookingMapper;
@@ -109,9 +110,9 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
+    @Transactional
     public BookingDto updateBooking(long userId, long bookingId, String approved) throws RuntimeException {
         Booking booking = findBooking(bookingId);
-        User owner = booking.getItem().getOwner();
 
         validateBookingUpdate(userId, booking);
         switch (approved) {
