@@ -4,7 +4,7 @@ import lombok.*;
 import ru.practicum.shareit.user.model.User;
 
 import jakarta.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "comments")
@@ -28,6 +28,6 @@ public class Comment {
     private User author;
 
     @Column(name = "created_date")
-    private LocalDate created;
+    private LocalDateTime created;
 
 }

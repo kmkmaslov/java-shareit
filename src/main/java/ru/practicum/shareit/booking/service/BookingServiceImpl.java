@@ -24,7 +24,7 @@ import ru.practicum.shareit.user.dto.UserMapper;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -51,8 +51,8 @@ public class BookingServiceImpl implements BookingService {
         UserDto userDto = userService.getUser(userId);
         validateBookingDate(userId, bookingFromUser);
         ItemDto itemDto = getValidatedBookingItem(userId, bookingFromUser);
-        LocalDate start = bookingFromUser.getStart();
-        LocalDate end = bookingFromUser.getEnd();
+        LocalDateTime start = bookingFromUser.getStart();
+        LocalDateTime end = bookingFromUser.getEnd();
         Booking booking = Booking.builder()
                 .booker(userMapper.toUser(userDto))
                 .item(itemMapper.toItem(itemDto))
@@ -66,8 +66,8 @@ public class BookingServiceImpl implements BookingService {
     }
 
     private void validateBookingDate(long userId, BookingFromUserDto booking) {
-        LocalDate start = booking.getStart();
-        LocalDate end = booking.getEnd();
+        LocalDateTime start = booking.getStart();
+        LocalDateTime end = booking.getEnd();
         if (start == null || end == null) {
             log.info("booking {} from id={} does not have date", booking, userId);
             throw new ValidationException();
@@ -80,11 +80,11 @@ public class BookingServiceImpl implements BookingService {
             log.info("booking {} from id={} end date before start ", booking, userId);
             throw new ValidationException();
         }
-        if (start.isBefore(LocalDate.now())) {
+        if (start.isBefore(LocalDateTime.now())) {
             log.info("booking {} from id={} start date before now", booking, userId);
             throw new ValidationException();
         }
-        if (end.isBefore(LocalDate.now())) {
+        if (end.isBefore(LocalDateTime.now())) {
             log.info("У бронирования {} от user id={} дата окончания бронирования раньше текущей даты", booking, userId);
             throw new ValidationException();
         }
@@ -195,20 +195,20 @@ public class BookingServiceImpl implements BookingService {
             case CURRENT:
                 bookings = bookingRepository.findByBookerAndStartIsBeforeAndEndIsAfter(
                         user,
-                        LocalDate.now(),
-                        LocalDate.now(),
+                        LocalDateTime.now(),
+                        LocalDateTime.now(),
                         Sort.by("end").descending());
                 break;
             case PAST:
                 bookings = bookingRepository.findByBookerAndEndIsBefore(
                         user,
-                        LocalDate.now(),
+                        LocalDateTime.now(),
                         Sort.by("end").descending());
                 break;
             case FUTURE:
                 bookings = bookingRepository.findByBookerAndStartIsAfter(
                         user,
-                        LocalDate.now(),
+                        LocalDateTime.now(),
                         Sort.by("end").descending());
                 break;
             case WAITING:
@@ -246,20 +246,20 @@ public class BookingServiceImpl implements BookingService {
             case CURRENT:
                 bookings = bookingRepository.findByItemOwnerAndStartIsBeforeAndEndIsAfter(
                         user,
-                        LocalDate.now(),
-                        LocalDate.now(),
+                        LocalDateTime.now(),
+                        LocalDateTime.now(),
                         Sort.by("end").descending());
                 break;
             case PAST:
                 bookings = bookingRepository.findByItemOwnerAndEndIsBefore(
                         user,
-                        LocalDate.now(),
+                        LocalDateTime.now(),
                         Sort.by("end").descending());
                 break;
             case FUTURE:
                 bookings = bookingRepository.findByItemOwnerAndStartIsAfter(
                         user,
-                        LocalDate.now(),
+                        LocalDateTime.now(),
                         Sort.by("end").descending());
                 break;
             case WAITING:

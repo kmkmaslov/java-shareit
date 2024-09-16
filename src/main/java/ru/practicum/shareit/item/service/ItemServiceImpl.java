@@ -23,7 +23,7 @@ import ru.practicum.shareit.user.dto.UserMapper;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -118,12 +118,12 @@ public class ItemServiceImpl implements ItemService {
         long itemId = itemDto.getId();
         Optional<Booking> lastBooking = bookingRepository.findFirst1ByItemIdIsAndStartIsBeforeAndStatusIsOrderByEndDesc(
                 itemId,
-                LocalDate.now(),
+                LocalDateTime.now(),
                 Status.APPROVED);
         itemDto.setLastBooking(bookingMapper.toBookingForItemDto(lastBooking.orElse(null)));
         Optional<Booking> nextBooking = bookingRepository.findFirst1ByItemIdIsAndStartIsAfterAndStatusIsOrderByStartAsc(
                 itemId,
-                LocalDate.now(),
+                LocalDateTime.now(),
                 Status.APPROVED);
         itemDto.setNextBooking(bookingMapper.toBookingForItemDto(nextBooking.orElse(null)));
     }
@@ -179,7 +179,7 @@ public class ItemServiceImpl implements ItemService {
     public CommentDto addComment(long userId, long itemId, CommentDto commentDto) {
         User author = userMapper.toUser(userService.getUser2(userId));
         Item item = findItem(itemId);
-        Optional<Booking> booking = bookingRepository.findFirst1ByItemIdAndBookerIdAndEndIsBefore(itemId, userId, LocalDate.now());
+        Optional<Booking> booking = bookingRepository.findFirst1ByItemIdAndBookerIdAndEndIsBefore(itemId, userId, LocalDateTime.now());
         if (booking.isEmpty()) {
             log.info("Пользователь с id={} не может добавить отзыв к товару с id={}, он не бронировал его",
                     userId, itemId);
@@ -195,7 +195,7 @@ public class ItemServiceImpl implements ItemService {
                 .text(text)
                 .item(item)
                 .author(author)
-                .created(LocalDate.now())
+                .created(LocalDateTime.now())
                 .build();
         Comment savedComment = commentRepository.save(comment);
         log.info("Сохранен новый отзыв {} от пользователя с id={} на товар с id={} текста",

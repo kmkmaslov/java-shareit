@@ -9,7 +9,7 @@ import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.enums.Status;
 
 import jakarta.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "bookings")
@@ -24,10 +24,10 @@ public class Booking {
     private long id;
 
     @Column(name = "start_date")
-    private LocalDate start;
+    private LocalDateTime start;
 
     @Column(name = "end_date")
-    private LocalDate end;
+    private LocalDateTime end;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Item item;
