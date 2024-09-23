@@ -27,8 +27,8 @@ public class BookingController {
 
     @PatchMapping("/{bookingId}")
     public ResponseEntity<BookingDto> update(@RequestHeader(value = "X-Sharer-User-Id") long userId,
-                                             @PathVariable long bookingId,
-                                             @RequestParam String approved) {
+                                             @PathVariable("bookingId") long bookingId,
+                                             @RequestParam("approved") String approved) {
         log.info("PATCH /bookings/{} user id={}", bookingId, userId);
         return ResponseEntity.ok().body(bookingService.updateBooking(userId, bookingId, approved));
 
@@ -36,7 +36,7 @@ public class BookingController {
 
     @GetMapping("/{bookingId}")
     public ResponseEntity<BookingDto> get(@RequestHeader(value = "X-Sharer-User-Id") long userId,
-                                          @PathVariable long bookingId) {
+                                          @PathVariable("bookingId") long bookingId) {
         log.info("GET /bookings/{} user id={}", userId, bookingId);
         return ResponseEntity.ok().body(bookingService.getBooking(userId, bookingId));
     }
