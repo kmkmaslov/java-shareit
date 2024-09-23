@@ -11,8 +11,8 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "requests")
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class ItemRequest {
 

@@ -10,8 +10,8 @@ import org.hibernate.Hibernate;
 
 @Entity
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @Table(name = "users", schema = "public", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 public class User {
