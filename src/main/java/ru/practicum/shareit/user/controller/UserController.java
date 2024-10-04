@@ -24,7 +24,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDto> getUser(@PathVariable("id") long userId) {
+    public ResponseEntity<UserDto> getUser(@PathVariable("userId") long userId) {
         log.info("GET /users/{} ", userId);
         return ResponseEntity.ok().body(userService.getUser(userId));
     }
@@ -36,14 +36,14 @@ public class UserController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<UserDto> update(@PathVariable("id") long userId,
+    public ResponseEntity<UserDto> update(@PathVariable("userId") long userId,
                                           @RequestBody UserDto userDto) {
         log.info("PATCH /users/{}", userId);
         return ResponseEntity.ok().body(userService.update(userId, userDto));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<UserDto> deleteUser(@PathVariable("id") long userId) {
+    public ResponseEntity<UserDto> deleteUser(@PathVariable("userId") long userId) {
         log.info("DELETE /users/{}", userId);
         userService.deleteUser(userId);
         return ResponseEntity.ok().build();
