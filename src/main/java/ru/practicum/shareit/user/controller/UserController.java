@@ -1,4 +1,4 @@
-package ru.practicum.shareit.user;
+package ru.practicum.shareit.user.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +36,8 @@ public class UserController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<UserDto> update(@PathVariable("id") long userId, @RequestBody UserDto userDto) {
+    public ResponseEntity<UserDto> update(@PathVariable("id") long userId,
+                                          @RequestBody UserDto userDto) {
         log.info("PATCH /users/{}", userId);
         return ResponseEntity.ok().body(userService.update(userId, userDto));
     }

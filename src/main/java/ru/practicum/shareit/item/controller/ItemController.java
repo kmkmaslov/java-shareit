@@ -1,4 +1,4 @@
-package ru.practicum.shareit.item;
+package ru.practicum.shareit.item.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,12 +23,15 @@ public class ItemController {
     }
 
     @PatchMapping("/{itemId}")
-    public ResponseEntity<ItemDto> add(@RequestHeader(value = "X-Sharer-User-Id", defaultValue = "0") long userId, @PathVariable long itemId, @RequestBody ItemDto itemDto) {
+    public ResponseEntity<ItemDto> add(@RequestHeader(value = "X-Sharer-User-Id", defaultValue = "0") long userId,
+                                       @PathVariable("itemId") long itemId,
+                                       @RequestBody ItemDto itemDto) {
         return ResponseEntity.ok().body(itemService.updateItem(userId, itemId, itemDto));
     }
 
     @GetMapping("/{itemId}")
-    public ResponseEntity<ItemDto> get(@RequestHeader("X-Sharer-User-Id") long userId, @PathVariable long itemId) {
+    public ResponseEntity<ItemDto> get(@RequestHeader("X-Sharer-User-Id") long userId,
+                                       @PathVariable("itemId") long itemId) {
         return ResponseEntity.ok().body(itemService.getItem(userId, itemId));
     }
 
@@ -38,7 +41,8 @@ public class ItemController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<ItemDto>> search(@RequestHeader("X-Sharer-User-Id") long userId, @RequestParam String text) {
+    public ResponseEntity<List<ItemDto>> search(@RequestHeader("X-Sharer-User-Id") long userId,
+                                                @RequestParam("text") String text) {
         return ResponseEntity.ok().body(itemService.search(userId, text));
     }
 }
